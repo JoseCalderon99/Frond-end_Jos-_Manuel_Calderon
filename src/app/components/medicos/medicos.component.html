@@ -1,0 +1,106 @@
+<nav class="navbar navbar-light navbar-expand-lg " style="background-color:#E7E570;">
+
+  <h1 class="btn-outline-success" ></h1>
+ <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+   <span class="navbar-toggler-icon"></span>
+ </button>
+
+ <div class="collapse navbar-collapse" id="navbarSupportedContent">
+   <ul class="navbar-nav mr-auto">
+     <li class="nav-item ">
+       <a class="nav-link"  routerLink="/medicos">MEDICOS<span class="sr-only">(current)</span></a>
+     </li>
+     <li class="nav-item">
+       <a class="nav-link"routerLink="/hospitales">HOSPITALES</a>
+     </li>
+     <li class="nav-item">
+      <a class="nav-link" routerLink="/usuario">USUARIOS</a>
+    </li>
+   </ul>
+   <form class="form-inline my-2 my-lg-0">
+   <div class="form-group" style="width: 30%;">
+    <input type="text" class="form-control" name="filterPost" id=""  placeholder="Search.." [(ngModel)]="filterPost">
+  </div>
+   </form>
+   <form class="form-inline my-2 my-lg-0">
+    
+     <div ><button class="btn btn-outline-success my-2 my-sm-0" routerLink="/login" (click)="logout()">Log Out</button></div>
+     
+     
+   </form>
+ </div>
+</nav>
+
+
+
+<h1>MEDICOS</h1>
+<hr>
+
+
+
+<div class="row">
+  <div class="col text-right">
+    <button class="btn btn-success" routerLink="/medico/nuevo">
+      <i class="fa fa-plus"></i>
+      Agregar
+    </button>
+  </div>
+</div>
+
+ 
+
+<table class="table table-bordered"id="datos">
+  <thead class="thead-dark">
+    <tr>
+
+      <th scope="col">Nombre</th>
+      <th scope="col">Usuario</th>
+      <th scope="col">Hospital</th>
+      <th scope="col">tools</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let medico of medicos | filter: filterPost | paginate: { itemsPerPage: 5, currentPage: p }; let i = index">
+ 
+      <td>{{ medico.nombre }}</td>
+      <td>{{ medico.usuarioEma }}</td>
+      <td>{{ medico.hospitalNom }}</td>
+
+      <td>
+
+        <button class="btn btn-info mr-1" [routerLink]="['/medico', medico._id ]">
+          <i class="fas fa-edit"></i>
+        </button>
+
+        <button class="btn btn-danger" (click)="borrarMedico( medico, i ) ">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+
+        <button style="margin-left: 5px;" class="btn btn-success" (click)="info( medico ) ">
+          <i class="fas fa-info"></i>
+        </button>
+
+
+      </td>
+    </tr>
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </tbody>
+</table>
+
+<div *ngIf="!cargando && medicos.length === 0" class="alert alert-warning text-center mt-3 animated fadeIn faster">
+  <h4 class="alert-heading">No hay registros</h4>
+  <p>
+    <i class="fa fa-exclamation fa-2x"></i>
+  </p>
+</div>
+
+<div *ngIf="cargando" class="alert alert-info text-center mt-3 animated fadeIn faster">
+  <h4 class="alert-heading">Cargando</h4>
+  <p>
+    <i class="fa fa-sync-alt fa-spin fa-2x"></i>
+  </p>
+  <p class="mb-0">
+    Espere por favor
+  </p>
+</div>
